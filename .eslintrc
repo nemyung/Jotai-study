@@ -1,0 +1,11 @@
+{
+ "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest"
+  },
+  "extends": ["react-app", "plugin:prettier/recommended"]
+}
