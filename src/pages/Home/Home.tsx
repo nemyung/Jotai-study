@@ -1,45 +1,46 @@
-import { useAtom } from 'jotai';
-import { departureAtom, flightFilter, FlightFilter, ONE_WAY_FLIGHT, RETURN_FLIGHT, returnAtom } from './atom';
-import { isValidDate, isValidFormat } from '../utils';
+import { useAtom, useSetAtom, useAtomValue } from 'jotai';
+import { useResetAtom } from 'jotai/utils';
+import { timeAtom, percentageAtom, durationTimeAtom } from './atom';
+import useInterval from './hook';
+
+const INTERVAL = 100;
 
 function Home() {
-  const [filter, setFilter] = useAtom(flightFilter);
-  const [departure, setDeparture] = useAtom(departureAtom);
-  const [returnState, setReturn] = useAtom(returnAtom);
+  const updateTime = useSetAtom(timeAtom);
+  const percentage = useAtomValue(percentageAtom);
+  const reset = useResetAtom(percentageAtom);
+  const [duration, setDuration] = useAtom(durationTimeAtom);
 
-  const isDepartureValid = isValidFormat(departure) && isValidDate(departure);
-  const isReturnValid = isValidFormat(departure) && isValidDate(returnState);
-
-  let isSubmitEnabled = true;
-
-  if (filter === ONE_WAY_FLIGHT) {
-    isSubmitEnabled = isDepartureValid;
-  } else if (filter === RETURN_FLIGHT) {
-    isSubmitEnabled =
-      isDepartureValid && isReturnValid && new Date(departure).valueOf() < new Date(returnState).valueOf();
-  }
+  useInterval(() => {
+    updateTime(INTERVAL);
+  }, INTERVAL);
 
   return (
-    <main>
-      <select
-        value={filter}
-        onChange={(e) => {
-          const val = Number(e.currentTarget.value) as FlightFilter;
-          setFilter(val);
-        }}
-      >
-        <option value={ONE_WAY_FLIGHT}>one way flight</option>
-        <option value={RETURN_FLIGHT}>return flight</option>
-      </select>
-      <input type="text" value={departure} onChange={(e) => setDeparture(e.currentTarget.value)} />
+    <section style={{ color: 'white', width: '200px', height: '300px', backgroundColor: 'midnightblue' }}>
+      <div>
+        <p>Elapsed Time: </p>
+        <div style={{ position: 'relative', background: 'red', height: '20px' }}>
+          <div
+            style={{
+              position: 'absolute',
+              background: 'yellow',
+              inset: '0',
+              transform: `translateX(${(percentage - 100).toFixed(1)}%)`,
+            }}
+          />
+        </div>
+      </div>
+      <p>{percentage.toFixed(1)}s</p>
       <input
-        disabled={filter === ONE_WAY_FLIGHT}
-        type="text"
-        value={returnState}
-        onChange={(e) => setReturn(e.currentTarget.value)}
+        type="range"
+        min={100}
+        value={duration}
+        max={200}
+        step={10}
+        onChange={(e) => setDuration(Number(e.currentTarget.value))}
       />
-      <button disabled={!isSubmitEnabled}>submit</button>
-    </main>
+      <button onClick={reset}>123</button>;
+    </section>
   );
 }
 

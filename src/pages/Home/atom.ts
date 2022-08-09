@@ -1,13 +1,14 @@
 import { atom } from 'jotai';
-import { convert } from '../utils';
+import { atomWithReset } from 'jotai/utils';
+const baseTimeAtom = atom(Date.now());
+export const durationTimeAtom = atom(100);
+export const percentageAtom = atomWithReset(0);
 
-export const ONE_WAY_FLIGHT = 0;
-export const RETURN_FLIGHT = 1;
-
-export const FLIGHT_FILTER = [ONE_WAY_FLIGHT, RETURN_FLIGHT] as const;
-
-export type FlightFilter = typeof FLIGHT_FILTER[number];
-
-export const flightFilter = atom<FlightFilter>(ONE_WAY_FLIGHT);
-export const departureAtom = atom(convert(new Date().toLocaleString('en-GB')));
-export const returnAtom = atom(convert(new Date().toLocaleString('en-GB')));
+export const timeAtom = atom(
+  (get) => get(baseTimeAtom),
+  (get, set, newValue: number) => {
+    const duration = get(durationTimeAtom);
+    set(baseTimeAtom, Date.now());
+    set(percentageAtom, (c) => (c >= get(durationTimeAtom) ? c : c + newValue / (duration * 10)));
+  },
+);
