@@ -1,16 +1,34 @@
 import { useAtom } from 'jotai';
-import { derivedCountAtom } from './atom';
-import s from './Counter.module.css';
+import { celsiusAtom, fahrenheitAtom } from './atom';
 
 function Home() {
-  const [count, increment] = useAtom(derivedCountAtom);
+  const [celsius, setCelsius] = useAtom(celsiusAtom);
+  const [fahrenheit, setFahrenheit] = useAtom(fahrenheitAtom);
+
   return (
-    <div className={s.counter}>
-      <span className={s.counterDisplay}>current count is {count}</span>
-      <button className={s.counterButton} onClick={increment}>
-        +
-      </button>
-    </div>
+    <main>
+      <label htmlFor="celsius">
+        <input
+          id="celsius"
+          value={celsius}
+          onChange={(e) => {
+            setCelsius(e.currentTarget.value);
+          }}
+        />
+        <span>{celsius}</span>
+      </label>
+      <span>=</span>
+      <label htmlFor="fahrenheit">
+        <input
+          id="fahrenheit"
+          value={fahrenheit}
+          onChange={(e) => {
+            setFahrenheit(e.currentTarget.value);
+          }}
+        />
+        <span>{fahrenheit}</span>
+      </label>
+    </main>
   );
 }
 
