@@ -12,7 +12,6 @@ function Home() {
   const [text, setText] = useAtom(textAtom);
   const upperCaseText = useAtomValue(upperCaseAtom);
   const [open, setOpen] = useState(false);
-  const [gcText, setGcText] = useAtom(useMemo(() => atom('defaultValue'), []));
 
   return (
     <>
@@ -25,11 +24,6 @@ function Home() {
           <label>
             <span>YOUR TEXT</span>
             <input type="text" value={text} onChange={(e) => setText(e.currentTarget.value)} />
-          </label>
-          <h2>{gcText}</h2>
-          <label>
-            <span> GC TEXT </span>
-            <input type="text" value={gcText} onChange={(e) => setGcText(e.currentTarget.value)} />
           </label>
         </div>
       )}
