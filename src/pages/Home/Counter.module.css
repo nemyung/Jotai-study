@@ -1,0 +1,23 @@
+.counter {
+  width: 200px;
+  height: 100px;
+  background-color: cornsilk;
+  margin-top: 200px;
+  margin-left: 200px;
+}
+
+.counterDisplay {
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.counterButton {
+  display: block;
+  background-color: red;
+  border: none;
+  margin: 0 auto;
+  padding: 2px 10px;
+}

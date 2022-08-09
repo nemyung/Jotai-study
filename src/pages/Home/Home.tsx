@@ -1,33 +1,16 @@
-import { useState, useMemo } from 'react';
-import { atom, useAtom, useAtomValue } from 'jotai';
-
-// atom config
-export const textAtom = atom('');
-
-// derived atoms
-// 1. READ_ONLY
-const upperCaseAtom = atom((get) => get(textAtom).toUpperCase());
+import { useAtom } from 'jotai';
+import { derivedCountAtom } from './atom';
+import s from './Counter.module.css';
 
 function Home() {
-  const [text, setText] = useAtom(textAtom);
-  const upperCaseText = useAtomValue(upperCaseAtom);
-  const [open, setOpen] = useState(false);
-
+  const [count, increment] = useAtom(derivedCountAtom);
   return (
-    <>
-      <h1>Primitive Atoms</h1>
-      <button onClick={() => setOpen((prev) => !prev)}>{open ? 'close' : 'open'}</button>
-      {open && (
-        <div>
-          <p>{text}</p>
-          <p>{upperCaseText}</p>
-          <label>
-            <span>YOUR TEXT</span>
-            <input type="text" value={text} onChange={(e) => setText(e.currentTarget.value)} />
-          </label>
-        </div>
-      )}
-    </>
+    <div className={s.counter}>
+      <span className={s.counterDisplay}>current count is {count}</span>
+      <button className={s.counterButton} onClick={increment}>
+        +
+      </button>
+    </div>
   );
 }
 
